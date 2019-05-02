@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-  console.log("foo")
+  
 // initialize firebase
 
 
@@ -29,6 +29,7 @@ $("#submitBtn").on("click", function(event) {
 
   //set user input values to variables
   var trainName = $("#trainame").val().trim();
+
   var destination = $("#destination").val().trim();
 
   //converts user input to usable info
@@ -89,12 +90,15 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 //    console.log(frequency);
 
     //makes first train time neater
-    var trainTime = moment.unix(firstTime).format("hh:mm");
+    var trainTime = moment.unix(firstTime);
+    console.log(trainTime);
     //calculate difference between times
-    var difference =  moment().diff(moment(trainTime),"minutes");
+    var difference = moment.utc(moment().diff(moment(trainTime,"DD/MM/YYYY HH:mm:ss"), "minutes"))
+    console.log(difference)
 
     //time apart(remainder)
     var restAferLastTrain = difference % frequency;
+    console.log(restAferLastTrain);
 
     //minutes until arrival
     var nextTrain = frequency - restAferLastTrain;
@@ -104,7 +108,20 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 
     //adding info to DOM table 
     $("#trainTable > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + nextArrival + "</td><td>" + nextTrain + "</td></tr>");
+    console.log(nextArrival);
+    console.log(nextTrain);
 
 });
 });
+
+
+// var nextTrain = moment(frequency).diff(moment(restAferLastTrain),"minutes");
+
+
+
+
+
+
+
+
 
